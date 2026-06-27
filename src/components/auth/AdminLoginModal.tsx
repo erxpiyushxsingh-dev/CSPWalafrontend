@@ -15,8 +15,9 @@ interface AdminLoginModalProps {
 export default function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
   const router = useRouter();
   const [form, setForm] = useState({
-       email: 'piyush@example.com',
-    password: 'Secure@123'
+    email: '',
+    mobile: '',
+    password: '',
   });
     const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
@@ -93,6 +94,20 @@ const handleSubmit = async (e: React.FormEvent) => {
                 required
                 value={form.email}
                 onChange={handleChange}
+                className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200/50 transition-all text-sm"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="admin-mobile" className="block text-sm font-semibold text-gray-700 mb-2">Mobile Number</label>
+              <input
+                id="admin-mobile"
+                name="mobile"
+                type="tel"
+                maxLength={10}
+                value={form.mobile}
+                onChange={handleChange}
+                placeholder="10-digit mobile number"
                 className="w-full px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200/50 transition-all text-sm"
               />
             </div>

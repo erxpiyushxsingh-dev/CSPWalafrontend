@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { triggerSessionExpired } from './sessionExpired'
 
 const CSP_TOKEN_KEY = 'csp_access_token'
 
@@ -18,5 +19,14 @@ cspApi.interceptors.request.use((config) => {
   }
   return config
 })
+
+// An expired/invalid CSP token on wallet/passbook calls → session expired flow.
+cspApi.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 401) triggerSessionExpired()
+    return Promise.reject(error)
+  }
+)
 
 export default cspApi

@@ -2,7 +2,12 @@
 
 import type { OpenAuth } from './types';
 
-export default function LandingFooter({ openAuth }: { openAuth: OpenAuth }) {
+interface Props {
+  openAuth: OpenAuth;
+  onAdminLogin: () => void;
+}
+
+export default function LandingFooter({ openAuth, onAdminLogin }: Props) {
   return (
     <footer id="contact">
       <div className="footer-wrap">
@@ -31,6 +36,7 @@ export default function LandingFooter({ openAuth }: { openAuth: OpenAuth }) {
           <a href="#passbook">पासबुक प्रिंट</a>
           <a href="#how">कसं चालतं</a>
           <a onClick={() => openAuth('login')} style={{ cursor: 'pointer' }}>लॉगिन</a>
+          <a onClick={onAdminLogin} style={{ cursor: 'pointer' }}>Admin Login</a>
         </div>
       </div>
       <div className="footer-bottom">© 2026 BcUnion.in — Shiv Infotech / Alpha Vision Labs</div>

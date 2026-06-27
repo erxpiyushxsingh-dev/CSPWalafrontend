@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
+import { triggerSessionExpired } from './sessionExpired'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
 
@@ -54,13 +55,21 @@ api.interceptors.response.use(
       ? localStorage.getItem('csp_refresh_token')
       : null
 
+    // Sessions last one day. Past that, stop refreshing and force re-login.
+    const exp = typeof window !== 'undefined'
+      ? Number(localStorage.getItem('csp_login_expires_at') || 0)
+      : 0
+    if (exp && Date.now() > exp) {
+      isRefreshing = false
+      processQueue(new Error('Session expired'), null)
+      triggerSessionExpired()
+      return Promise.reject(error)
+    }
+
     if (!rt) {
       isRefreshing = false
       processQueue(new Error('No refresh token'), null)
-      if (typeof window !== 'undefined') {
-        localStorage.clear()
-        window.location.href = '/login'
-      }
+      triggerSessionExpired()
       return Promise.reject(error)
     }
 
@@ -88,10 +97,7 @@ api.interceptors.response.use(
 
     } catch (err) {
       processQueue(err, null)
-      if (typeof window !== 'undefined') {
-        localStorage.clear()
-        window.location.href = '/login'
-      }
+      triggerSessionExpired()
       return Promise.reject(err)
     } finally {
       isRefreshing = false

@@ -320,6 +320,21 @@ html.bc-scroll.bc-locked { overflow: hidden; }
   border-radius: 9px; padding: 11px 13px; font-size: .82rem; margin-bottom: 18px;
 }
 
+/* ===== SESSION EXPIRED POPUP ===== */
+.bc-landing .session-expired-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(35, 41, 58, .55); backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.bc-landing .session-expired-box {
+  background: var(--paper); border-radius: 16px; max-width: 380px; width: 100%;
+  padding: 30px 28px; text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+}
+.bc-landing .session-expired-box .se-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.bc-landing .session-expired-box h3 { font-size: 1.25rem; margin-bottom: 8px; }
+.bc-landing .session-expired-box p { color: var(--ink-soft); font-size: .9rem; margin-bottom: 20px; }
+
 /* ===== SOCIAL SECURITY BOX ===== */
 .bc-landing .ss-section { max-width: 1180px; margin: 0 auto; padding: 0 24px 90px; }
 .bc-landing .ss-box {

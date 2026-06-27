@@ -52,11 +52,14 @@ export const loginCSP = createAsyncThunk(
     try {
       const res = await api.post('/auth/login', data)
       const { access_token, refresh_token, user } = res.data.data
+      // Sessions last one day, then re-authentication is required.
+      const ONE_DAY = 60 * 60 * 24
       localStorage.setItem('csp_access_token', access_token)
       localStorage.setItem('csp_refresh_token', refresh_token)
+      localStorage.setItem('csp_login_expires_at', String(Date.now() + ONE_DAY * 1000))
       // Middleware gates /dashboard on this cookie, so set it on every login.
       if (typeof document !== 'undefined') {
-        document.cookie = `token=${access_token}; path=/; max-age=${60 * 60 * 24 * 7}`
+        document.cookie = `token=${access_token}; path=/; max-age=${ONE_DAY}`
       }
       return user as User
     } catch (e: any) {
@@ -67,7 +70,7 @@ export const loginCSP = createAsyncThunk(
 
 export const loginAdmin = createAsyncThunk(
   'auth/loginAdmin',
-  async (data: { email: string; password: string }, { rejectWithValue }) => {
+  async (data: { email: string; mobile?: string; password: string }, { rejectWithValue }) => {
     try {
       const res = await fetch(`${API_BASE_URL}/admin/auth/login`, {
         method: 'POST',
@@ -129,6 +132,7 @@ export const logoutCSP = createAsyncThunk('auth/logoutCSP', async () => {
   } catch {}
   localStorage.removeItem('csp_access_token')
   localStorage.removeItem('csp_refresh_token')
+  localStorage.removeItem('csp_login_expires_at')
   if (typeof document !== 'undefined') {
     document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
   }

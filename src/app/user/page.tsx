@@ -10,11 +10,14 @@ import HowItWorks from './components/HowItWorks';
 import SchemesSection from './components/SchemesSection';
 import LandingFooter from './components/LandingFooter';
 import AuthPanel from './components/AuthPanel';
+import AdminLoginModal from '@/components/auth/AdminLoginModal';
 import type { OpenAuth } from './components/types';
 
 export default function UserLandingPage() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   // Load the landing-page fonts once (Devanagari serif/sans + JetBrains Mono).
   useEffect(() => {
@@ -36,10 +39,10 @@ export default function UserLandingPage() {
     return () => html.classList.remove('bc-scroll', 'bc-locked');
   }, []);
 
-  // Freeze background scroll while the auth panel is open.
+  // Freeze background scroll while a dialog is open.
   useEffect(() => {
-    document.documentElement.classList.toggle('bc-locked', panelOpen);
-  }, [panelOpen]);
+    document.documentElement.classList.toggle('bc-locked', panelOpen || sessionExpired);
+  }, [panelOpen, sessionExpired]);
 
   // Close on Escape.
   useEffect(() => {
@@ -50,9 +53,24 @@ export default function UserLandingPage() {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
+  // Show the "session expired" popup when redirected here with ?session=expired,
+  // then strip the flag from the URL.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('session') === 'expired') {
+      setSessionExpired(true);
+      window.history.replaceState({}, '', '/user');
+    }
+  }, []);
+
   const openAuth: OpenAuth = (tab) => {
     setAuthTab(tab);
     setPanelOpen(true);
+  };
+
+  const handleRelogin = () => {
+    setSessionExpired(false);
+    openAuth('login');
   };
 
   return (
@@ -65,7 +83,7 @@ export default function UserLandingPage() {
         <HowItWorks />
         <SchemesSection openAuth={openAuth} />
       </main>
-      <LandingFooter openAuth={openAuth} />
+      <LandingFooter openAuth={openAuth} onAdminLogin={() => setAdminOpen(true)} />
 
       <AuthPanel
         open={panelOpen}
@@ -73,6 +91,21 @@ export default function UserLandingPage() {
         onClose={() => setPanelOpen(false)}
         onTab={setAuthTab}
       />
+
+      <AdminLoginModal isOpen={adminOpen} onClose={() => setAdminOpen(false)} />
+
+      {sessionExpired && (
+        <div className="session-expired-overlay" onClick={() => setSessionExpired(false)}>
+          <div className="session-expired-box" onClick={(e) => e.stopPropagation()}>
+            <div className="se-icon">⏰</div>
+            <h3>तुमचे सत्र संपले आहे</h3>
+            <p>Your session has expired. Please log in again to continue.</p>
+            <button className="login-submit" onClick={handleRelogin}>
+              पुन्हा लॉगिन करा / Login again
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
