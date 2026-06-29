@@ -4,6 +4,7 @@ import { ArrowRight, ArrowLeft, CreditCard } from 'lucide-react'
 
 interface DebitCardFormData {
   branchName: string
+  place: string
   accountNumber: string
   cardRequestType: string
   cardType: string
@@ -212,15 +213,27 @@ export function DebitCardFormSection({ formData, onChange, onContinue, onBack }:
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-[#374151] mb-1.5">Mobile Number</label>
-        <input
-          type="text"
-          value={formData.mobileNumber}
-          onChange={(e) => onChange({ mobileNumber: e.target.value })}
-          className="w-full px-3 py-2 text-sm border border-[#d1d5db] rounded-lg focus:outline-none focus:ring-2 focus:ring-[rgba(13,143,114,0.12)] focus:border-[#0d8f72]"
-          placeholder="Mobile number"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-[#374151] mb-1.5">Mobile Number</label>
+          <input
+            type="text"
+            value={formData.mobileNumber}
+            onChange={(e) => onChange({ mobileNumber: e.target.value })}
+            className="w-full px-3 py-2 text-sm border border-[#d1d5db] rounded-lg focus:outline-none focus:ring-2 focus:ring-[rgba(13,143,114,0.12)] focus:border-[#0d8f72]"
+            placeholder="Mobile number"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[#374151] mb-1.5">Place</label>
+          <input
+            type="text"
+            value={formData.place}
+            onChange={(e) => onChange({ place: e.target.value })}
+            className="w-full px-3 py-2 text-sm border border-[#d1d5db] rounded-lg focus:outline-none focus:ring-2 focus:ring-[rgba(13,143,114,0.12)] focus:border-[#0d8f72]"
+            placeholder="Place (e.g. city/town)"
+          />
+        </div>
       </div>
 
       <div className="flex items-center justify-between pt-4 border-t border-[#f3f4f6]">

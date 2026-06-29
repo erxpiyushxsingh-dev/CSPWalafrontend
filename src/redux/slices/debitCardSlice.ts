@@ -41,6 +41,7 @@ export interface DebitCardRequest {
 
 export interface DebitCardFormData {
   branchName: string
+  place: string
   accountNumber: string
   cardRequestType: string
   cardType: string
@@ -69,6 +70,7 @@ interface DebitCardState {
 
 const initialFormData: DebitCardFormData = {
   branchName: '',
+  place: '',
   accountNumber: '',
   cardRequestType: '',
   cardType: '',

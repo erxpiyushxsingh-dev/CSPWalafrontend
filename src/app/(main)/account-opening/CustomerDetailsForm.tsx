@@ -1424,32 +1424,6 @@ export default function CustomerDetailsForm() {
                   onChange={(e) => set("cif", e.target.value)}
                 />
               </div>
-              <div className="cdf-group">
-                <label className="cdf-label">Branch Name</label>
-                <input
-                  className="cdf-input"
-                  value={formData.branch_name}
-                  onChange={(e) => set("branch_name", e.target.value)}
-                />
-              </div>
-              <div className="cdf-group">
-                <label className="cdf-label">BC Name</label>
-                <input
-                  className="cdf-input"
-                  placeholder="BC / BF name"
-                  value={formData.bc_name}
-                  onChange={(e) => set("bc_name", e.target.value)}
-                />
-              </div>
-              <div className="cdf-group">
-                <label className="cdf-label">BC Code</label>
-                <input
-                  className="cdf-input"
-                  placeholder="BC / BF number"
-                  value={formData.bc_code}
-                  onChange={(e) => set("bc_code", e.target.value)}
-                />
-              </div>
             </div>
 
             <div className="cdf-grid-4">

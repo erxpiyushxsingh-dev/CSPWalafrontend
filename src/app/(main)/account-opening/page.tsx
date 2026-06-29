@@ -50,15 +50,6 @@ export default function AccountFormPage() {
   } = useAppSelector((state) => state.accountOpening);
 
   const customerCreating = useAppSelector((state) => state.customers.creating);
-  const authUser = useAppSelector((state) => state.auth.user);
-
-  // Pre-fill BC Name from the logged-in CSP (editable; the PDF falls back to
-  // the CSP's profile BC name/number when these are left blank).
-  useEffect(() => {
-    if (authUser?.name && !formData.bc_name) {
-      dispatch(updateFormField({ field: 'bc_name', value: authUser.name }));
-    }
-  }, [authUser, formData.bc_name, dispatch]);
 
   useEffect(() => {
     if (submitSuccess) {
